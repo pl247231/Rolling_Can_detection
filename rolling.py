@@ -1,16 +1,16 @@
+
 import cv2 as cv
 import numpy as np
 
-cap = cv.VideoCapture('IMG_4616.MOV')
+cap = cv.VideoCapture('original.MOV')
 detected = 0
 total = 0
 frame1 = 1
 copy1 = 1
 
 frame_width = int(cap.get(3))
-
 frame_height = int(cap.get(4))
-out = cv.VideoWriter('outpy.MOV', cv.VideoWriter_fourcc('m', 'p', '4', 'v'), 60, (frame_width, frame_height))
+out = cv.VideoWriter('detected.MOV', cv.VideoWriter_fourcc('m','p','4','v'), 60, (frame_width, frame_height))
 while cap.isOpened():
     ret, frame = cap.read()
 
@@ -22,7 +22,7 @@ while cap.isOpened():
     blurred = cv.blur(frame, (3,2))
     gray = cv.cvtColor(blurred, cv.COLOR_BGR2GRAY)
 
-    circles = cv.HoughCircles(gray, cv.HOUGH_GRADIENT, 1, 1000, param1=70, param2=27, minRadius=14, maxRadius=20)
+    circles = cv.HoughCircles(gray, cv.HOUGH_GRADIENT, 1, 1000, param1=70, param2=25, minRadius=14, maxRadius=19)
     if circles is not None:
         circles = np.uint16(np.around(circles))
         param = circles[0][0]     
