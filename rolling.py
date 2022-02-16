@@ -6,6 +6,11 @@ detected = 0
 total = 0
 frame1 = 1
 copy1 = 1
+
+frame_width = int(cap.get(3))
+
+frame_height = int(cap.get(4))
+out = cv.VideoWriter('outpy.MOV', cv.VideoWriter_fourcc('m', 'p', '4', 'v'), 60, (frame_width, frame_height))
 while cap.isOpened():
     ret, frame = cap.read()
 
@@ -14,19 +19,21 @@ while cap.isOpened():
 
     copy = frame.copy()
     total += 1
-    blurred = cv.medianBlur(frame, 5)
+    blurred = cv.blur(frame, (3,2))
     gray = cv.cvtColor(blurred, cv.COLOR_BGR2GRAY)
 
     circles = cv.HoughCircles(gray, cv.HOUGH_GRADIENT, 1, 1000, param1=70, param2=27, minRadius=14, maxRadius=20)
     if circles is not None:
         circles = np.uint16(np.around(circles))
-        param = circles[0][0]
+        param = circles[0][0]     
         cv.circle(frame, (param[0], param[1]), param[2], (0, 255, 0), 2)
         cv.circle(frame, (param[0], param[1]), 2, (0, 255, 0), 3)
         detected += 1
 
-    cv.putText(frame, "Percentage:" + str(int(round(detected/total, 2)*100)) + "%", (300, 70), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1, cv.LINE_AA)
-    cv.putText(frame, "Frames With Circles:" + str(detected), (50, 70), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1, cv.LINE_AA)
+    cv.putText(frame, "Percentage:" + str(int(round(detected/total, 2)*100)) + "%", (330, 70), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1, cv.LINE_AA)
+    cv.putText(frame, "Frames With Circles:" + str(detected), (20, 70), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1, cv.LINE_AA)
+    cv.putText(frame, "Frame:" + str(total), (230, 70), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1, cv.LINE_AA)
+    out.write(frame)
     cv.imshow('video', np.hstack([frame, copy]))
     frame1 = frame
     copy1 = copy
