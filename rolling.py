@@ -22,7 +22,7 @@ while cap.isOpened():
     blurred = cv.blur(frame, (3,1))
     gray = cv.cvtColor(blurred, cv.COLOR_BGR2GRAY)
 
-    circles = cv.HoughCircles(gray, cv.HOUGH_GRADIENT, 1, 1000, param1=70, param2=25, minRadius=14, maxRadius=19)
+    circles = cv.HoughCircles(gray, cv.HOUGH_GRADIENT, 1, 1000, param1=80, param2=25, minRadius=14, maxRadius=19)
     if circles is not None:
         circles = np.uint16(np.around(circles))
         param = circles[0][0]     
