@@ -2,7 +2,7 @@
 import cv2 as cv
 import numpy as np
 
-cap = cv.VideoCapture('original.MOV')
+cap = cv.VideoCapture('IMG_4616.MOV')
 detected = 0
 total = 0
 frame1 = 1
@@ -10,7 +10,7 @@ copy1 = 1
 
 frame_width = int(cap.get(3))
 frame_height = int(cap.get(4))
-out = cv.VideoWriter('detected.MOV', cv.VideoWriter_fourcc('m','p','4','v'), 60, (frame_width, frame_height))
+out = cv.VideoWriter('detected.MOV', cv.VideoWriter_fourcc('m','p','4','v'), 30, (frame_width, frame_height))
 while cap.isOpened():
     ret, frame = cap.read()
 
@@ -19,7 +19,7 @@ while cap.isOpened():
 
     copy = frame.copy()
     total += 1
-    blurred = cv.blur(frame, (3,2))
+    blurred = cv.blur(frame, (3,1))
     gray = cv.cvtColor(blurred, cv.COLOR_BGR2GRAY)
 
     circles = cv.HoughCircles(gray, cv.HOUGH_GRADIENT, 1, 1000, param1=70, param2=25, minRadius=14, maxRadius=19)
@@ -37,7 +37,7 @@ while cap.isOpened():
     cv.imshow('video', np.hstack([frame, copy]))
     frame1 = frame
     copy1 = copy
-    if cv.waitKey(5) == ord(' '):
+    if cv.waitKey(30) == ord(' '):
         break
 cv.imshow('video', np.hstack([frame1, copy1]))
 cv.waitKey(0)
